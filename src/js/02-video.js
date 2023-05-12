@@ -16,7 +16,7 @@ const recordSecondsOnStop = function (event) {
 };
 
 
-player.on('pause', throttle(recordSecondsOnStop, 1000));
+player.on('timeupdate', throttle(recordSecondsOnStop, 1000));
 
 
 const localStorageRecord = localStorage.getItem('videoplayer-current-time');
