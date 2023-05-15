@@ -35,9 +35,7 @@ const localStorageRecord = localStorage.getItem('videoplayer-current-time');
 
 console.log(localStorageRecord);
 
-player
-  .setCurrentTime(localStorageRecord)
-  ;
+player.setCurrentTime(timeRange);
 
 
 
