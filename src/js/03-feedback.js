@@ -1,60 +1,32 @@
 import throttle from 'lodash.throttle';
+const formElements = {
+  formEl: document.querySelector('.feedback-form'),
+  emailEl: document.querySelector('input[type="email"]'),
+  textAreaEl: document.querySelector('textarea[name="message"]'),
+  submitBtn: document.querySelector('button[type="submit"]'),
+};
+const LOCAL_STORAGE_KEY = 'feedback-form-state';
+const formDataLocalStorage =
+  JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || {};
+let formData = formDataLocalStorage;
 
-const STORAGE_KEY = 'feedback-form-state';
-
-const form = document.querySelector('.feedback-form');
-const messageArea = document.querySelector('textarea');
-const emailArea = document.querySelector('input');
-const formData = {};
-
-onTextAreaInput();
-
-
-form.addEventListener('submit', onFormSubmit);
-
-form.addEventListener(
-  'input',
-  throttle(event => {
- 
-    formData[event.target.name] = event.target.value;
-
-  
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));      
-  }
-      , 500)
-);
-
-
-function onFormSubmit(event) {
-    event.preventDefault();
-     const formElements = event.currentTarget.elements;
-    //  console.log(formElements);
-
-     const mail = formElements.email.value;
-     const text = formElements.message.value;
-   
-   
-    localStorage.removeItem(STORAGE_KEY);
-   
-
-     console.log(`"email" - ${mail}, "message" - ${text}`);
-    form.reset();
-   
+if (formData.email) {
+  formElements.emailEl.value = formData.email;
+}
+if (formData.message) {
+  formElements.textAreaEl.value = formData.message;
 }
 
+const onFormInput = e => {
+  formData[e.target.name] = e.target.value;
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(formData));
+};
+formElements.formEl.addEventListener('input', throttle(onFormInput, 1000));
 
-
-function onTextAreaInput(event) {
-    const savedText = localStorage.getItem(STORAGE_KEY);
-    const parsedText = JSON.parse(savedText);
-  if (parsedText) {
-
-      emailArea.value = parsedText.email;
-      messageArea.value = parsedText.message;
-  }
-}
-
-
-
-
-
+const onFormSubmit = e => {
+  e.preventDefault();
+  e.currentTarget.reset();
+  localStorage.removeItem(LOCAL_STORAGE_KEY);
+  console.log(formData);
+};
+formElements.formEl.addEventListener('submit', onFormSubmit);

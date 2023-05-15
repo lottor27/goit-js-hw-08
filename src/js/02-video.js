@@ -33,7 +33,7 @@ player.on('timeupdate', throttle(recordSecondsOnStop, 1000));
 const localStorageRecord = localStorage.getItem('videoplayer-current-time');
 
 
-console.log(localStorageRecord);
+// console.log(localStorageRecord);
 
 player.setCurrentTime(timeRange);
 
